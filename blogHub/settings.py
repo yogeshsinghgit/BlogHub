@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'user',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +86,8 @@ DATABASES = {
     }
 }
 
+# Set the custom user model
+AUTH_USER_MODEL = 'user.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
