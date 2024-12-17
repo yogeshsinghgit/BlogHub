@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,6 +27,8 @@ SECRET_KEY = 'django-insecure-!++#nlr&n0s$ps)=*nqntv54ght&=g6fhx%w$8dc%#l$8qklzs
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+REST_AUTH_TOKEN_MODEL = None
+
 
 ALLOWED_HOSTS = []
 
@@ -42,7 +47,18 @@ INSTALLED_APPS = [
     'core',
     'user',
     'rest_framework',
+    #  'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
+]
+
+INSTALLED_APPS += [
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    # 'allauth.socialaccount.providers.linkedin',
+    'dj_rest_auth',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'blogHub.urls'
@@ -96,8 +113,23 @@ REST_FRAMEWORK = {
     ],
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SITE_ID = 1  # Required by django-allauth
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Or configure as per your needs
+ACCOUNT_AUTHENTICATION_METHOD = "username"  # Or "email" as needed
+ACCOUNT_EMAIL_REQUIRED = True
 
 from datetime import timedelta
+
+# REST_USE_JWT = True
+REST_AUTH = {
+    'USE_JWT': True,
+    'TOKEN_MODEL': None,  # Explicitly set this
+}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=5),
@@ -106,6 +138,27 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+
+import os
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
+            'key': ''
+        }
+    },
+    'github': {
+        'APP': {
+            'client_id': os.getenv('GITHUB_CLIENT_ID'),
+            'secret': os.getenv('GITHUB_CLIENT_SECRET'),
+            'key': ''
+        }
+    }
+}
+
 
 
 # Password validation
