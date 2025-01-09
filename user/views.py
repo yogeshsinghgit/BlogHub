@@ -87,7 +87,8 @@ class GetUserInfoView(APIView):
         return Response({
             "username": user.username,
             "id": user.id,
-            "email": user.email
+            "email": user.email,
+            "user-type": user.user_type
         }, status=status.HTTP_200_OK)
 
 

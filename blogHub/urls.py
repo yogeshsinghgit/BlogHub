@@ -5,6 +5,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('user.urls')),
+
+    # blog urls
+    path('api/', include('core.urls')),
     # social authentication
     # Include DJ-Rest-Auth URLs for login, logout, etc.
     path('auth/', include('dj_rest_auth.urls')),  
