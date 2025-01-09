@@ -20,7 +20,6 @@ class CategoryModel(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)  
-        # Call the parent class's save method
 
 
 # Tags Model
@@ -59,7 +58,7 @@ class BlogModel(models.Model):
         # If slug is not provided, generate it from the title
         if not self.slug:
             self.slug = slugify(self.title)
-        super().save(*args, **kwargs)  # Call the parent class's save method
+        super().save(*args, **kwargs)  
 
     def __str__(self) -> str:
         return self.title

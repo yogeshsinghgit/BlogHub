@@ -103,6 +103,18 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'your_database_name',
+#         'USER': 'your_username',
+#         'PASSWORD': 'your_password',
+#         'HOST': 'localhost',  # Replace with your PostgreSQL server's address if necessary
+#         'PORT': '',  # Leave empty to use the default PostgreSQL port (usually 5432)
+#     }
+# }
+
+
 # Set the custom user model
 AUTH_USER_MODEL = 'user.CustomUser'
 
