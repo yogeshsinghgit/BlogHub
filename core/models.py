@@ -82,16 +82,16 @@ class BlogModel(models.Model):
        
 
 # # Follow Model
-# class FollowModel(models.Model):
-#     follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='follower')
-#     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')
-#     created_at = models.DateTimeField(auto_now_add=True)
+class FollowModel(models.Model):
+    follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='follower')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')
+    created_at = models.DateTimeField(auto_now_add=True)
 
 # # Like Model
-# class LikeModel(models.Model):
-#     reader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='likedBy')
-#     blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE, related_name='likedBlog')
-#     created_at = models.DateTimeField(auto_now_add=True)
+class LikeModel(models.Model):
+    reader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='likedBy')
+    blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE, related_name='likedBlog')
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 # class NotificationModel(models.Model):

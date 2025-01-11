@@ -59,3 +59,7 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
         return f"{self.email} ({self.get_user_type_display()})"
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    is_paid = models.BooleanField(default=False)
+
