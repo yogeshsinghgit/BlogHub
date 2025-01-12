@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from uuid import uuid4
 from blogHub.utils import get_paginated_response
@@ -9,8 +9,9 @@ from django.db.models import Count
 
 from user.permissions import IsAdmin, IsReader, IsAuthor
 from user.models import CustomUser
-from .serializers import CategorySerializer, GetCategorySerializer, TagsSerializer, PostBlogSerializer, GetAllBlogSerializer
+from .serializers import CategorySerializer, GetCategorySerializer, GetBlogSerializer,TagsSerializer, PostBlogSerializer, GetAllBlogSerializer
 from .models import CategoryModel, BlogModel, TagsModel
+from .throttling import BlogAccessThrottle
 
 
 
@@ -137,3 +138,23 @@ class BlogAPI(APIView):
             blog_status = "Published" if blog_status == 1 else "Draft"
             return Response({"Message": f"Blog with id {blog_id} status changed to {blog_status}"})
     
+
+
+class BlogViewAPI(APIView):
+    permission_classes = [AllowAny]  # Allow any user (authenticated or not)
+    throttle_classes = [BlogAccessThrottle]
+
+    def get(self, request, slug = None):
+        # Fetch and return the blogs
+        if slug:
+            try:
+                blog = BlogModel.objects.filter(slug = slug).first()
+                blog_serializer = GetBlogSerializer(blog)
+                return Response({"blogs": blog_serializer.data}, status=status.HTTP_200_OK)
+            
+            except BlogModel.DoesNotExist:
+                return Response({"Message": "No such blog exists"}, status=status.HTTP_404_NOT_FOUND)
+        
+        blogs = BlogModel.objects.all().order_by('-created_at')
+        blog_serializer = GetAllBlogSerializer(blogs, many=True)
+        return Response({"blogs": blog_serializer.data}, status=status.HTTP_200_OK)

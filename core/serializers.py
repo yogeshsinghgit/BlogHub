@@ -38,3 +38,11 @@ class GetAllBlogSerializer(ModelSerializer):
         model = BlogModel
         fields = ['id','title', 'status', 'categories', 'created_at']
 
+class GetBlogSerializer(ModelSerializer):
+    categories = CategorySerializer(many=True, read_only=True)
+    tags = TagsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BlogModel
+        fields = ['id','title', 'content', 'status', 'categories', 'tags', 'created_at', 'updated_at']
+
